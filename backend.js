@@ -194,16 +194,14 @@ class Backend
         });
     }
 
-    deleteTeam(indexList, sessionId) {
+    deleteTeam(teamList, sessionId) {
         return this.db.get(sessionId).then((doc) => {
-            var newArray = [];
-            for (var i = 0; i < doc.teams.length; i++) {
-                if (indexList.indexOf(i) === -1) {
-                    // save this team
-                    newArray.push(doc.teams[i]);
-                } 
+            for (let i = 0; i < teamList.length; i++) {
+                const index = doc.teams.findIndex(item => item.id === teamList[i].id);
+                if (index !== -1) {
+                    doc.teams.splice(index, 1);
+                }
             }
-            doc.teams = newArray;
             return this.db.put(doc);
         });
     }

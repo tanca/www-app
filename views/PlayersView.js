@@ -5,14 +5,35 @@ var players_view_template = /*template*/`
   
       <AddPlayerDialog  :visible="showAddPlayerDialog" :key="showAddPlayerDialog" @close="showAddPlayerDialog=false" ></AddPlayerDialog>
       
-      <v-layout row justify-end>
-        <v-btn dark fab small color="indigo" @click="addSelectedToTeam"><v-icon>group_add</v-icon></v-btn>
-        <v-btn dark fab small color="pink" @click="showAddPlayerDialog=true"><v-icon>add</v-icon></v-btn>
-      </v-layout>
+  <v-toolbar flat dense>
+      <v-spacer></v-spacer>
+      <v-btn fab small color="indigo" @click="addSelectedToTeam"><v-icon>mdi-account-multiple-plus</v-icon></v-btn>
+      <v-btn fab small color="pink" @click="showAddPlayerDialog=true"><v-icon>mdi-account-plus-outline</v-icon></v-btn>
+  </v-toolbar> 
 
-      <v-text-field v-model="searchWord" prepend-icon="search" name="search" label="Search" type="text"></v-text-field>
-      
 
+  <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+
+<v-data-table
+  :headers="headers"
+  :items="players"
+  :search="search"
+  :custom-filter="filterPlayer"
+  v-model="selected"
+  item-key="id"
+  show-select
+  hide-default-footer
+  class="elevation-1">
+
+</v-data-table>
+
+<!--
       <v-list>
         <template v-for="(item, index) in filteredPlayers">
           
@@ -37,8 +58,7 @@ var players_view_template = /*template*/`
 
         </template>
       </v-list>
-
-   <!--   <pre>{{ selected }}</pre> -->
+-->
   
 </v-layout>
 `;
@@ -53,8 +73,13 @@ PlayersView = {
   data () {
     return {
       showAddPlayerDialog: false,
-      searchWord: '',
-      selected: []
+      search: '',
+      selected: [],
+      headers: [
+        { text: this.$t('number'), value: 'id' },
+        { text: this.$t('firstname'), value: 'firstname' },
+        { text: this.$t('lastname'), value: 'lastname' }
+      ]
     }
   },
   computed: {
@@ -67,24 +92,7 @@ PlayersView = {
           });
         }
         return pList;
-      },
-      filteredPlayers() {
-        var pList = [];
-        
-        pList = this.players.filter((doc) => {
-            var matchFilter = true;
-
-            if (this.searchWord !== '') {
-              var word = Api.removeDiacritics(this.searchWord.trim().toLowerCase());
-              matchFilter = doc.firstname.toLowerCase().includes(word) || 
-                            doc.lastname.toLowerCase().includes(word);
-            }
-
-            return matchFilter;
-        });
-
-        return pList;
-      },
+      }
       
   },
   //====================================================================================================================
@@ -97,13 +105,20 @@ PlayersView = {
   },
   //====================================================================================================================
   methods : {
-    togglePlayer (id) {
-      if (this.selected.includes(id)) {
-        // Removing the color
-        this.selected.splice(this.selected.indexOf(id), 1);
-      } else {
-        this.selected.push(id);
+
+    filterPlayer (value, search, item) {
+      let matchFilter = true;
+
+      if (search !== '') {
+        let word = Api.removeDiacritics(search.trim().toLowerCase());
+        matchFilter = item.firstname.toLowerCase().includes(word) || 
+                      item.lastname.toLowerCase().includes(word);
       }
+
+      return value != null &&
+        search != null &&
+        typeof value === 'string' &&
+        matchFilter;
     },
     addSelectedToTeam() {
       if (this.selected.length == 0) {

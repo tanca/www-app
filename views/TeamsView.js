@@ -3,36 +3,25 @@ var teams_view_template = /*template*/`
 
 <v-layout column>
 
-      
-    <v-layout row justify-end>
-      <v-btn fab small color="red" @click="deleteSelectedTeams"><v-icon>delete</v-icon></v-btn>
-    </v-layout>
-    
-    <v-list>
-      <template v-for="(item, index) in teams">
+<v-toolbar flat dense>
+    <v-spacer></v-spacer>
+    <v-btn fab small color="red" @click="deleteSelectedTeams"><v-icon>mdi-delete</v-icon></v-btn>
+</v-toolbar>  
+
+<v-data-table
+    :headers="headers"
+    :items="teams"
+    v-model="selected"
+    item-key="id"
+    show-select
+    hide-default-footer
+    class="elevation-1">
+
+    <template v-slot:item.teamName="{ item }">
+     {{ teamName(item) }}
+    </template>
         
-        <v-list-tile @click.capture.stop="toggleTeam(index)">
-
-            <v-list-tile-action>
-              <v-checkbox v-model="selected" multiple :value="index" />
-            </v-list-tile-action>
-
-            <v-list-tile-content>
-                <v-list-tile-title v-html="item.id"></v-list-tile-title>
-              </v-list-tile-content>
-
-              <v-list-tile-content>
-                <v-list-tile-title v-html="getTeamName(item)"></v-list-tile-title>
-              </v-list-tile-content>
-
-        </v-list-tile>
-
-        <v-divider></v-divider>
-
-      </template>
-    </v-list>
-
- <!--     <pre>{{ selected }}</pre>  -->
+</v-data-table>
 
 </v-layout>
 `;
@@ -46,14 +35,18 @@ TeamsView = {
   },
   data () {
     return {
-      selected: []
+      selected: [],
+      headers: [
+        { text: this.$t('number'), value: 'id' },
+        { text: this.$t('team'), value: 'teamName' }
+      ]
     }
   },
   computed: {
     teams () {
       return this.$store.getters.getTeams;
     },
-    getTeamName() {
+    teamName() {
       return this.$store.getters.getTeamName;
     }
   },
@@ -67,13 +60,6 @@ TeamsView = {
   },
   //====================================================================================================================
   methods : {
-    toggleTeam (id) {
-      if (this.selected.includes(id)) {
-        this.selected.splice(this.selected.indexOf(id), 1);
-      } else {
-        this.selected.push(id);
-      }
-    },
     deleteSelectedTeams() {
       if (this.selected.length == 0) {
         this.$eventHub.$emit('alert', 'Vous devez sélectionner au moins une équipe', 'info');

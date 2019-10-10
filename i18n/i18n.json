@@ -19,7 +19,8 @@
       "sos": "SOS",
       "session_date": "Session date",
       "load": "Load",
-      "delete": "Delete"
+      "delete": "Delete",
+      "number": "Number"
     }, 
     "fr":
     {
@@ -41,7 +42,8 @@
       "sos": "SPA",
       "session_date": "Date de la session",
       "load": "Charger",
-      "delete": "Supprimer"
+      "delete": "Supprimer",
+      "number": "Numéro"
     }
 }
 
