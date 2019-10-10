@@ -1,11 +1,11 @@
-var score_dialog_template = /*template*/`
+var create_team_dialog_template = /*template*/`
 <v-dialog v-model="show" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
 <v-card tile>
   <v-toolbar flat color="primary">
     <v-btn icon @click.stop="show=false">
       <v-icon>close</v-icon>
     </v-btn>
-    <v-toolbar-title>Score edit</v-toolbar-title>
+    <v-toolbar-title>Create team</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
       <v-btn text @click.stop="save">Save</v-btn>
@@ -15,6 +15,11 @@ var score_dialog_template = /*template*/`
   <!-- CENTRE DU DIALOG --> 
   <v-card-text>
       <v-flex xs12 sm6 md3>
+
+      <span>Team number</span>
+      <v-text-field v-model="t1ScoreClone" type="text" :rules="[(value) => value <= 13 || 'Max 13 points']" :mask="maskXXX" label="Number" append-outer-icon="add" @click:append-outer="incrementTeam1" prepend-icon="remove" @click:prepend="decrementTeam1"></v-text-field>
+
+
         <span>{{t1}}</span>
 
         <v-text-field v-model="t1ScoreClone" type="text" :rules="[(value) => value <= 13 || 'Max 13 points']" :mask="mask" label="Number" append-outer-icon="add" @click:append-outer="incrementTeam1" prepend-icon="remove" @click:prepend="decrementTeam1"></v-text-field>
@@ -32,7 +37,7 @@ var score_dialog_template = /*template*/`
 </v-dialog>`
 
 ScoreDialog = {
-  template: score_dialog_template,
+  template: create_team_dialog_template,
   props: {
 	  visible: {
 		  type: Boolean,
@@ -72,6 +77,7 @@ ScoreDialog = {
       return {
         errorMessages: '',
         mask: '##',
+        maskXXX: '###', 
         t1ScoreClone: this.t1score,
         t2ScoreClone: this.t2score
       }

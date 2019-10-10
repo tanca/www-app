@@ -6,12 +6,13 @@ var results_view_template = /*template*/`
       
     <v-data-table :headers="headers"
                 :items="items"
-                expand
                 class="elevation-1">
       <template slot="items" slot-scope="props">
         <tr>
           <td class="text-xs">{{ props.item.rank }}</td>
           <td class="text-xs">{{ props.item.team }}</td>
+          <td class="text-xs">{{ props.item.games_won }}</td>
+          <td class="text-xs">{{ props.item.games_lost }}</td>
           <td class="text-xs">{{ props.item.total_wins }}</td>
           <td class="text-xs">{{ props.item.total_losses }}</td>
           <td class="text-xs">{{ props.item.diff }}</td>
@@ -36,6 +37,8 @@ ResultsView = {
       headers: [
         { text: this.$t('rank'), value: 'rank' },
         { text: this.$t('team'), value: 'team' },
+        { text: this.$t('won games'), value: 'games_won' },
+        { text: this.$t('lost games'), value: 'games_lost' },
         { text: this.$t('wins'), value: 'total_wins' },
         { text: this.$t('losses'), value: 'total_losses' },
         { text: this.$t('diff'), value: 'diff' },

@@ -47,13 +47,13 @@ async function loadEverything()
 // MAIN APP TEMPLATE LAYOUT
 // =================================================================================================
 const app_template = /*template*/`
-<v-app dark>
+<v-app>
 
     <v-snackbar v-model="alert" top :color="alertType" :timeout="alertTimeout">
         {{ alertText }}
     </v-snackbar>
 
-    <TopToolbar></TopToolbar>
+    <TopToolbarView></TopToolbarView>
 
     <v-content>
     
@@ -87,8 +87,11 @@ const app = new Vue({
     el: '#app',
     store,
     i18n,
+    vuetify: new Vuetify({
+        theme: { dark: true }
+      }),
     template: app_template,
-    components: {TopToolbar, BottomNav},
+    components: {TopToolbarView, BottomNav},
     computed: {
         isReady() {
             return this.$store.state.finishedLoading;
@@ -127,34 +130,8 @@ const app = new Vue({
 
         this.$vuetify.lang.current = locale;
         this.$vuetify.lang.locales = {
-            en: {
-                noDataText: 'Nothing',
-                dataIterator: {
-                    rowsPerPageText: "Items per page:",
-                    rowsPerPageAll: "All",
-                    pageText: "{0}-{1} of {2}",
-                    noResultsText: "No matching records found",
-                    nextPage: "Next page",
-                    prevPage: "Previous page"
-                },
-                dataTable: {
-                    rowsPerPageText: "Rows per page:"
-                }
-            },
-            fr: {
-                noDataText: 'Aucune donnée',
-                dataIterator: {
-                    rowsPerPageText: "Éléments par page:",
-                    rowsPerPageAll: "Tous",
-                    pageText: "{0}-{1} de {2}",
-                    noResultsText: "Aucun élément correspondant",
-                    nextPage: "Page suivante",
-                    prevPage: "Page précédente"
-                },
-                dataTable: {
-                    rowsPerPageText: "Lignes par page :"
-                }
-            }
+            
+            fr: i18n_vuetify_fr
         }
 
         console.log('[APP] Tanca created');
