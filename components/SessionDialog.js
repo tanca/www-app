@@ -1,8 +1,8 @@
 var session_dialog_template = /*template*/`
 <v-dialog v-model="show" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
 <v-card tile>
-  <v-toolbar card dark color="primary">
-    <v-btn icon dark @click.stop="show=false">
+  <v-toolbar card color="primary">
+    <v-btn icon @click.stop="show=false">
       <v-icon>close</v-icon>
     </v-btn>
     <v-toolbar-title>Sessions</v-toolbar-title>
@@ -15,7 +15,6 @@ var session_dialog_template = /*template*/`
         <v-btn color="success" @click="newSession()">{{ $t('new_session') }}</v-btn>
         <v-data-table :headers="headers"
                 :items="sessions"
-                expand
                 class="elevation-1">
           <template slot="items" slot-scope="props">
             <tr :style="getRowStyle(props.item.isCurrent)">

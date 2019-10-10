@@ -1,40 +1,55 @@
-const top_toolbar_template = /*template*/`
+const top_toolbar_view_template = /*template*/`
 <div>
 
 <!-- The key is necessary to re-render the component in case of session has changed -->
 <SessionDialog  :visible="showSessionDialog" :key="showSessionDialog" @close="showSessionDialog=false" ></SessionDialog>
      
-<!--
-<v-navigation-drawer app fixed v-model="showMenu">
-    <v-list dense>
-    <v-list-tile @click="">
-        <v-list-tile-action>
-            <v-icon>settings</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-            <v-list-tile-title>Settings</v-list-tile-title>
-        </v-list-tile-content>
-    </v-list-tile>
+<v-navigation-drawer
+  v-model="drawer"
+   absolute
+   temporary
+  >
+    <v-list-item>
+      <v-list-item-avatar>
+        <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+      </v-list-item-avatar>
 
-    <v-list-tile @click="">
-        <v-list-tile-action>
-            <v-icon>help</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-            <v-list-tile-title>Help</v-list-tile-title>
-        </v-list-tile-content>
-    </v-list-tile>
+      <v-list-item-content>
+        <v-list-item-title>John Leider</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-divider></v-divider>
+
+    <v-list dense>
+
+      <v-list-item
+        v-for="item in items"
+        :key="item.title"
+        link
+      >
+        <v-list-item-icon>
+          <v-icon>{{ item.icon }}</v-icon>
+        </v-list-item-icon>
+
+        <v-list-item-content>
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
     </v-list>
 </v-navigation-drawer>
--->
 
-<v-toolbar fixed app>
+<v-app-bar fixed app>
 
-    <v-toolbar-side-icon @click.stop="toggleMenu"></v-toolbar-side-icon>
+    <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+    
     <v-toolbar-title>{{ title }}</v-toolbar-title>
+    
     <v-spacer></v-spacer>
+
+    
     <v-btn to="/home" icon>
-        <v-icon>home</v-icon>
+        <v-icon>mdi-home</v-icon>
     </v-btn>
     <!--
     <v-btn icon>
@@ -44,16 +59,16 @@ const top_toolbar_template = /*template*/`
         <v-icon>backup</v-icon>
     </v-btn>
     -->
-</v-toolbar>
+</v-app-bar>
 
 </div>
 
 `;
 
 
-TopToolbar = {
-    name: 'top-toolbar',
-    template: top_toolbar_template,
+TopToolbarView = {
+    name: 'top-toolbar-view',
+    template: top_toolbar_view_template,
       //====================================================================================================================
     components: {
         SessionDialog
@@ -63,6 +78,11 @@ TopToolbar = {
         return {
             title: "Tanca",
             showSessionDialog: false,
+            drawer: null,
+            items: [
+                { title: 'Sessions', icon: 'dashboard' },
+                { title: 'Options', icon: 'question_answer' },
+            ],
         }
     },
     //====================================================================================================================
@@ -74,6 +94,6 @@ TopToolbar = {
     },
     //====================================================================================================================
     mounted: function() {
-        console.log('Mounted component TopToolbar');
+        console.log('[VUE] Mounted component TopToolbar');
     }
 }

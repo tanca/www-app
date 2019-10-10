@@ -6,8 +6,7 @@ class GamesManager
     constructor() {
         this.eventRanking = [];
         this.config = {
-            pointsWin: 13,
-            maxRounds: 3
+            pointsWin: 13
         }
     }
 
@@ -33,9 +32,9 @@ class GamesManager
      */
     sortEventRanking() {
         this.eventRanking.sort( function(a, b) {
-            if (a.total_wins < b.total_wins) {
+            if (a.games_won < b.games_won) {
                 return 1;
-            } else if (a.total_wins > b.total_wins) {
+            } else if (a.games_won > b.games_won) {
                 return -1;
             } else {
                 // Equal, use diff to see who is best
@@ -71,6 +70,8 @@ class GamesManager
                 id: team.id,
                 total_wins: 0,
                 total_losses: 0,
+                games_won: 0,
+                games_lost: 0,
                 diff: 0,
                 sos: 0, // Sum of Opponent Scores (SPA == Somme des Points des Adversaires)
                 opponents: [] // opponents Ids
@@ -83,11 +84,24 @@ class GamesManager
                     if (g.team1Id == team.id) {
                         rankEntry.total_wins += g.team1Score;
                         rankEntry.total_losses += g.team2Score;
+                        if (g.team1Score > g.team2Score) {
+                            rankEntry.games_won++;
+                        } else if (g.team2Score > g.team1Score) {
+                            rankEntry.games_lost++;
+                        }
+
                         rankEntry.opponents.push(g.team2Id);
                     }
                     if (g.team2Id == team.id) {
                         rankEntry.total_wins += g.team2Score;
                         rankEntry.total_losses += g.team1Score;
+                        
+                        if (g.team2Score > g.team1Score) {
+                            rankEntry.games_won++;
+                        } else if (g.team1Score > g.team2Score) {
+                            rankEntry.games_lost++;
+                        }
+                        
                         rankEntry.opponents.push(g.team1Id);
                     }
                 }
@@ -116,10 +130,6 @@ class GamesManager
     createRounds(session) {
         // Math.floor((Math.random() * 10) + 1);
         return new Promise ( (resolve, reject) => {
-
-            if (session.rounds.length >= this.config.maxRounds) {
-                reject(new Error("Max rounds played."));
-            }
 
             // First update the ranking
             this.updateEventRanking(session);

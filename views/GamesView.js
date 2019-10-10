@@ -9,35 +9,37 @@ var games_view_template = /*template*/`
   </ScoreDialog>
   <v-flex xs12 >
   
-    <v-layout row >
-      <v-pagination v-model="page" :total-visible="3" :length="maxRounds"></v-pagination>
-      <v-spacer />
-      <v-btn dark fab small color="green" @click="createRounds()"><v-icon>play_circle_outline</v-icon></v-btn>
-    </v-layout>
+  <v-toolbar flat dense>
+      <v-toolbar-title>
+        <v-pagination v-model="page" :total-visible="4" :length="numberOfRounds" align-self="start"></v-pagination>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn fab small color="green" @click="createRounds()"><v-icon>mdi-play-circle-outline</v-icon></v-btn>
+  </v-toolbar>
    
-    <template v-for="(item, index) in getGames">
-      <v-card style="cursor:pointer;"  :color="getFinishedColor(item.finished)" tile raised dark @click.native="selectItem(item)">
- 
-          <v-card-actions>
-            <template xs6 v-for="(team, i) in item.teams">
-              <v-flex>
-                <v-layout align-center justify-space-between row fill-height>
-                  <span>&nbsp;</span>
-                  <span>({{team.id}})&nbsp;{{team.name}}</span>
 
-                  <v-avatar :color="getWinnerColor(team.winner)" size="30px">
-                    <span class="white--text">{{team.score}}</span>
-                  </v-avatar>
-                </v-layout>
-              </v-flex>
-
-            </template>
-           
-          </v-card-actions>
-      </v-card>
-
-      <v-divider></v-divider>
+  <v-simple-table>
+  <template v-slot:default>
+    <thead>
+      <tr>
+        <th class="text-left">Team 1</th>
+        <th class="text-left">Score</th>
+        <th class="text-left">Team 2</th>
+        <th class="text-left">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(item, i) in getGames" :key="i" @click="selectItem(item)" v-bind:class="{ blue: item.finished }">
+      <template v-for="team in item.teams">
+        <td>({{team.id}})&nbsp;{{team.name}}</td>
+        <td><v-avatar :color="getWinnerColor(team.winner)" size="30px">
+        <span class="white--text">{{team.score}}</span>
+      </v-avatar></td>
       </template>
+      </tr>
+    </tbody>
+  </template>
+  </v-simple-table>
 
     </v-flex>
 </v-layout>
@@ -54,7 +56,6 @@ GamesView = {
   data () {
     return {
       page: 1,
-      maxRounds: Games.config.maxRounds,
       showScoreDialog: false,
       team1: '',
       team2: '',
@@ -68,6 +69,9 @@ GamesView = {
   computed: {
     rounds () {
       return this.$store.getters.getRounds;
+    },
+    numberOfRounds () {
+      return this.$store.getters.getRounds.length;
     },
     /**
      * Here we build a dynamic array of objects to easily generate HTML list
@@ -123,9 +127,6 @@ GamesView = {
     },
     getWinnerColor(winner) {
       return winner ? 'blue darken-4' : 'purple';
-    },
-    getFinishedColor(finished) {
-      return finished ? 'blue' : 'grey darken-2';
     },
     getTeamNameById(id) {
       let team = this.$store.getters.getTeamById(id);

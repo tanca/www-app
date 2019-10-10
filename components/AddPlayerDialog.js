@@ -1,14 +1,14 @@
 var add_player_dialog_template = /*template*/`
 <v-dialog v-model="show" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
 <v-card tile>
-  <v-toolbar card dark color="primary">
-    <v-btn icon dark @click.stop="show=false">
+  <v-toolbar card color="primary">
+    <v-btn icon @click.stop="show=false">
       <v-icon>close</v-icon>
     </v-btn>
     <v-toolbar-title>Add player</v-toolbar-title>
     <v-spacer></v-spacer>
     <v-toolbar-items>
-      <v-btn dark flat @click.stop="savePlayer">Save</v-btn>
+      <v-btn text @click.stop="savePlayer">Save</v-btn>
     </v-toolbar-items>
   </v-toolbar>
 
