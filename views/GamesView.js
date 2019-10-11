@@ -1,15 +1,17 @@
 
 var games_view_template = /*template*/`
 
-<v-layout column>
+<v-card>
+    <v-row no-gutters>
+      <v-col cols="12">
 
   <ScoreDialog  :visible="showScoreDialog" :key="showScoreDialog" :round="page" :t1="team1" :t2="team2" :t1score="team1Score" :t2score="team2Score" :t1id="team1Id" :t2id="team2Id" 
       @close="showScoreDialog=false"
       @success="editScoreSuccess">
   </ScoreDialog>
-  <v-flex xs12 >
+
   
-  <v-toolbar flat dense>
+  <v-toolbar flat dense tile>
       <v-toolbar-title>
         <v-pagination v-model="page" :total-visible="4" :length="numberOfRounds" align-self="start"></v-pagination>
       </v-toolbar-title>
@@ -41,8 +43,9 @@ var games_view_template = /*template*/`
   </template>
   </v-simple-table>
 
-    </v-flex>
-</v-layout>
+  </v-col>
+  </v-row>
+</v-card>
 `;
 
 

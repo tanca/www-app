@@ -11,11 +11,12 @@ const top_toolbar_view_template = /*template*/`
   >
     <v-list-item>
       <v-list-item-avatar>
-        <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+        <v-icon>mdi-account-circle</v-icon>
+        <!--<v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>-->
       </v-list-item-avatar>
 
       <v-list-item-content>
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title>Your account</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
@@ -27,6 +28,7 @@ const top_toolbar_view_template = /*template*/`
         v-for="item in items"
         :key="item.title"
         link
+        @click="showSession()"
       >
         <v-list-item-icon>
           <v-icon>{{ item.icon }}</v-icon>
@@ -80,15 +82,15 @@ TopToolbarView = {
             showSessionDialog: false,
             drawer: null,
             items: [
-                { title: 'Sessions', icon: 'dashboard' },
-                { title: 'Options', icon: 'question_answer' },
+                { title: 'Sessions', icon: 'mdi-database' },
+                { title: 'Options', icon: 'mdi-settings-outline' },
             ],
         }
     },
     //====================================================================================================================
     methods: {
         
-        toggleMenu: function()  {
+        showSession: function()  {
             this.showSessionDialog = true;
         }
     },

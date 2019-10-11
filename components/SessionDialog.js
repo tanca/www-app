@@ -1,41 +1,46 @@
 var session_dialog_template = /*template*/`
 <v-dialog v-model="show" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
-<v-card tile>
-  <v-toolbar card color="primary">
-    <v-btn icon @click.stop="show=false">
-      <v-icon>close</v-icon>
-    </v-btn>
-    <v-toolbar-title>Sessions</v-toolbar-title>
-  </v-toolbar>
+<v-card>
+  <v-row no-gutters>
+    <v-col cols="12">
 
-  <!-- CENTRE DU DIALOG --> 
-  <v-card-text>
-    <v-layout column>
-      <v-flex xs12 >
-        <v-btn color="success" @click="newSession()">{{ $t('new_session') }}</v-btn>
+      <!-- TOOLBAR -->
+      <v-toolbar dense>
+        <v-btn icon @click.stop="show=false">
+          <v-icon>mdi-close-circle</v-icon>
+        </v-btn>
+        <v-toolbar-title>Sessions</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items>
+            <v-btn color="success" @click="newSession()">{{ $t('new_session') }}</v-btn>
+        </v-toolbar-items>
+        
+      </v-toolbar>
+
+        <!-- CENTRE DU DIALOG -->
         <v-data-table :headers="headers"
                 :items="sessions"
                 class="elevation-1">
-          <template slot="items" slot-scope="props">
-            <tr :style="getRowStyle(props.item.isCurrent)">
-              <td class="text-xs">{{ props.item.date }}</td>
-              <td>
-                <v-icon small @click="loadSession(props.item)">get_app</v-icon>
-              </td>
-              <td>
-                <v-icon small @click="deleteSession(props.item)">delete</v-icon>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
-         
-    </v-flex>
-    </v-layout>
-  </v-card-text>
- 
-</v-card>
-</v-dialog>`
 
+          <template v-slot:body="{ items }">
+            <tbody>
+              <tr v-for="item in items" :key="item.date" :style="getRowStyle(item.isCurrent)">
+                <td>{{ item.date }}</td>
+                <td><v-icon small @click="loadSession(item)">mdi-download</v-icon></td>
+                <td><v-icon small @click="deleteSession(item)">mdi-delete</v-icon></td>
+              </tr>
+            </tbody>
+          </template>
+
+
+
+        </v-data-table>
+    </v-col>
+  </v-row>
+</v-card>
+</v-dialog>
+`;
+// <tr :style="getRowStyle(props.item.isCurrent)">
 SessionDialog = {
   template: session_dialog_template,
   props: {

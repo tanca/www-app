@@ -3,8 +3,11 @@ var teams_view_template = /*template*/`
 
 <v-layout column>
 
-<v-toolbar flat dense>
+<v-toolbar flat dense tile>
     <v-spacer></v-spacer>
+    
+    <v-btn fab small color="indigo" @click="deleteSelectedTeams"><v-icon>mdi-account-multiple-plus</v-icon></v-btn>
+    &nbsp;
     <v-btn fab small color="red" @click="deleteSelectedTeams"><v-icon>mdi-delete</v-icon></v-btn>
 </v-toolbar>  
 
@@ -14,7 +17,6 @@ var teams_view_template = /*template*/`
     v-model="selected"
     item-key="id"
     show-select
-    hide-default-footer
     class="elevation-1">
 
     <template v-slot:item.teamName="{ item }">

@@ -5,16 +5,17 @@ var players_view_template = /*template*/`
   
       <AddPlayerDialog  :visible="showAddPlayerDialog" :key="showAddPlayerDialog" @close="showAddPlayerDialog=false" ></AddPlayerDialog>
       
-  <v-toolbar flat dense>
+  <v-toolbar flat dense tile>
       <v-spacer></v-spacer>
       <v-btn fab small color="indigo" @click="addSelectedToTeam"><v-icon>mdi-account-multiple-plus</v-icon></v-btn>
+      &nbsp;
       <v-btn fab small color="pink" @click="showAddPlayerDialog=true"><v-icon>mdi-account-plus-outline</v-icon></v-btn>
   </v-toolbar> 
 
 
   <v-text-field
         v-model="search"
-        append-icon="search"
+        append-icon="mdi-account-search"
         label="Search"
         single-line
         hide-details
@@ -26,39 +27,11 @@ var players_view_template = /*template*/`
   :search="search"
   :custom-filter="filterPlayer"
   v-model="selected"
-  item-key="id"
+  item-key="_id"
   show-select
-  hide-default-footer
   class="elevation-1">
 
 </v-data-table>
-
-<!--
-      <v-list>
-        <template v-for="(item, index) in filteredPlayers">
-          
-          <v-list-tile @click.capture.stop="togglePlayer(item._id)">
-
-              <v-list-tile-action>
-                <v-checkbox v-model="selected" multiple :value="item._id" />
-              </v-list-tile-action>
-
-                <v-list-tile-avatar>
-                  <v-icon>account_circle</v-icon>
-                </v-list-tile-avatar>
-  
-                <v-list-tile-content>
-                <p>{{ item.firstname }} {{item.lastname }}</p>
-    
-                </v-list-tile-content>
-
-          </v-list-tile>
-
-          <v-divider></v-divider>
-
-        </template>
-      </v-list>
--->
   
 </v-layout>
 `;
@@ -76,7 +49,6 @@ PlayersView = {
       search: '',
       selected: [],
       headers: [
-        { text: this.$t('number'), value: 'id' },
         { text: this.$t('firstname'), value: 'firstname' },
         { text: this.$t('lastname'), value: 'lastname' }
       ]
@@ -111,8 +83,8 @@ PlayersView = {
 
       if (search !== '') {
         let word = Api.removeDiacritics(search.trim().toLowerCase());
-        matchFilter = item.firstname.toLowerCase().includes(word) || 
-                      item.lastname.toLowerCase().includes(word);
+        matchFilter = Api.removeDiacritics(item.firstname.toLowerCase()).includes(word) || 
+                      Api.removeDiacritics(item.lastname.toLowerCase()).includes(word);
       }
 
       return value != null &&
@@ -124,7 +96,14 @@ PlayersView = {
       if (this.selected.length == 0) {
         this.$eventHub.$emit('alert', 'Vous devez sélectionner au moins un joueur', 'info');
       } else {
-        this.$store.dispatch('addTeam', this.selected).then((doc) => {
+        let idList = [];
+
+        for (let i = 0; i < this.selected.length; i++) {
+          idList.push(this.selected[i]._id);
+        }
+
+
+        this.$store.dispatch('addTeam', idList).then((doc) => {
           this.selected = [];
           console.log('[PLAYERS] Add team: ' + JSON.stringify(doc));
           this.$eventHub.$emit('alert', "L'équipe a été créée", 'success');
