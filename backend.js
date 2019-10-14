@@ -11,6 +11,16 @@ class Backend
         return uri;
     }
 
+    syncDb() {
+        this.db.sync('http://localhost:5984/club_limalonges').on('complete', function () {
+            // yay, we're done!
+            console.log('[DB] Sync ok!');
+          }).on('error', function (err) {
+            // boo, something went wrong!
+            console.log('[DB] Sync failure :(');
+          });
+    }
+
     async initializeDb(updatedCb, deletedCb) {
         this.db = new PouchDB('tanca');
 

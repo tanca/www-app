@@ -49,6 +49,11 @@ const top_toolbar_view_template = /*template*/`
     
     <v-spacer></v-spacer>
 
+    <v-btn icon @click="syncDatabase()">
+        <v-icon>mdi-cloud-sync</v-icon>
+    </v-btn>
+
+    &nbsp;
     
     <v-btn to="/home" icon>
         <v-icon>mdi-home</v-icon>
@@ -57,9 +62,7 @@ const top_toolbar_view_template = /*template*/`
     <v-btn icon>
         <v-icon>refresh</v-icon>
     </v-btn>
-    <v-btn icon>
-        <v-icon>backup</v-icon>
-    </v-btn>
+    
     -->
 </v-app-bar>
 
@@ -92,6 +95,9 @@ TopToolbarView = {
         
         showSession: function()  {
             this.showSessionDialog = true;
+        },
+        syncDatabase: function() {
+            Api.syncDb();
         }
     },
     //====================================================================================================================
